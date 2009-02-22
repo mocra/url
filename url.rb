@@ -23,7 +23,7 @@ post '/create' do
   url = dataset.filter(:url => params[:url])
   # Dunno why we have to call [:id] twice...
   id = url[:id][:id].to_s(36)
-  "Your new URL is http://url.com/#{id}"
+  "Your new URL is #{request.env["HTTP_ORIGIN"]}/#{id}"
 end
 
 __END__
