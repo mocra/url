@@ -22,8 +22,8 @@ post '/create' do
   
   url = dataset.filter(:url => params[:url])
   # Dunno why we have to call [:id] twice...
-  id = url[:id][:id].to_s(36)
-  "Your new URL is #{request.env["HTTP_ORIGIN"]}/#{id}"
+  @id = url[:id][:id].to_s(36)
+  haml :url
 end
 
 __END__
@@ -34,7 +34,14 @@ __END__
     %link{ :rel => "stylesheet", :href => "style.css"}
   %body
     = yield
-
+  .footer
+    This site uses the
+    %a{ :href => "http://github.com/radar/url"} url
+    %a{ :href => "http://sinatrarb.com"} Sinatra
+    application built by
+    %a{ :href => "http://frozenplague.net"} Ryan Bigg
+    %b
+    
 @@ form
 %form{ :action => "create", :method => "post", :class => "url_form"}
   %p
@@ -42,12 +49,11 @@ __END__
     %br/
     %input{ :type => "text", :name => "url", :id => "url", :size => 45 }
     %input{ :type => "submit", :name => "submit", :value => "URLize", :class => "button" }
+
     
 
-.footer
-  This site uses the
-  %a{ :href => "http://github.com/radar/url"} url
-  %a{ :href => "http://sinatrarb.com"} Sinatra
-  application built by
-  %a{ :href => "http://frozenplague.net"} Ryan Bigg
+@@ url
+== Your new URL is #{request.env["HTTP_ORIGIN"]}/#{@id}
+  
+
  
