@@ -11,40 +11,43 @@ get '/:url' do
 end
 
 get '/' do
-  layout_head +
-  "URL goes here: <form action='create' method='post'>
-     <p>
-       <label for='url'>
-       <input type='text' name='url' id='url' size='100'> <input type='submit' name='submit' value='URLize'>
-     </p>
-   </form>" +
-   layout_footer
+  haml :form
 end
 
 post '/create' do
-  dataset << {:url => params[:url] }
+  # Don't create duplicate!
+  if dataset.filter(:url => params[:url]).empty?
+    dataset << {:url => params[:url] }
+  end
+  
   url = dataset.filter(:url => params[:url])
   # Dunno why we have to call [:id] twice...
   id = url[:id][:id].to_s(36)
-  layout_head +
-  "Your new URL is http://url.com/#{id}" +
-  layout_footer
+  "Your new URL is http://url.com/#{id}"
 end
 
-def layout_head
-  "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\"
-     \"http://www.w3.org/TR/html4/strict.dtd\">
+__END__
 
-  <html lang='en'>
-  <head>
-  	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-  	<title>url</title>
-  </head>
-  <body>
-  "
-end
+@@ layout
+%html
+  %head
+    %link{ :rel => "stylesheet", :href => "style.css"}
+  %body
+    = yield
 
-def layout_footer
-  "</body>
-  </html>"
-end
+@@ form
+%form{ :action => "create", :method => "post", :class => "url_form"}
+  %p
+    %label{ :for => "url" } URL goes here
+    %br/
+    %input{ :type => "text", :name => "url", :id => "url", :size => 45 }
+    %input{ :type => "submit", :name => "submit", :value => "URLize", :class => "button" }
+    
+
+.footer
+  This site uses the
+  %a{ :href => "http://github.com/radar/url"} url
+  %a{ :href => "http://sinatrarb.com"} Sinatra
+  application built by
+  %a{ :href => "http://frozenplague.net"} Ryan Bigg
+ 
