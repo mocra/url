@@ -16,6 +16,9 @@ end
 
 post '/create' do
   # Don't create duplicate!
+  if params[:url].include?(request.env['HTTP_HOST'])
+    @error = "You've been bad.<br />You cannot create URL chains."
+    haml :error
   if dataset.filter(:url => params[:url]).empty?
     dataset << {:url => params[:url] }
   end
