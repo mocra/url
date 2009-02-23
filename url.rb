@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sequel'
+require 'haml'
 
 DB = Sequel.sqlite('url') unless defined?(DB)
 
