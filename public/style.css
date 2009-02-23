@@ -10,6 +10,11 @@ body, input {
   font-weight:bold;
 }
 
+input#url {
+  width:100%;
+  display:block;
+}
+
 .footer {
   position: fixed;
   bottom: 0px;

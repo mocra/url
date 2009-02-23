@@ -1,0 +1,9 @@
+%form{ :action => "create", :method => "post", :class => "url_form"}
+  %p
+    %label{ :for => "url" } URL goes here
+    %br/
+    %input{ :type => "text", :name => "url", :id => "url"}
+    %input{ :type => "submit", :name => "submit", :value => "URLize", :class => "button" }
+    
+%small
+  == We haz #{DB[:urls].count} urls
