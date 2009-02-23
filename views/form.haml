@@ -8,3 +8,9 @@
     
 %small
   == We haz #{DB[:urls].count} urls
+  %br/
+  Drag 
+  -#%a{:href => "javascript:void(location.host=='maps.google.com'?location.href='http://#{request.env['HTTP_HOST']}/c/'+encodeURIComponent(document.getElementById('link').href):location.href='http://#{request.env['HTTP_HOST']}/c/'+encodeURIComponent(location.href))"}
+  %a{:href => "javascript:void(location.host=='maps.google.com'?location.href='http://#{request.env['HTTP_HOST']}/c/'+document.getElementById('link').href:location.href='http://#{request.env['HTTP_HOST']}/c/'+location.href)"}
+    this link
+  to your bookmarks bar to save the link
