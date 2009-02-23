@@ -34,7 +34,14 @@ post '/create' do
   if url_chain?(params[:url])
     @error = "You've been bad.<br />You cannot create URL chains."
     haml :error
+  
   else
+    
+    # Assume http if nothing is specified.
+    if !/^(.*):\/\//.match(params[:url])
+      params[:url] = "http://#{params[:url]}"
+    end
+    
     if dataset.filter(:url => params[:url]).empty?
       dataset << {:url => params[:url] }
     end
