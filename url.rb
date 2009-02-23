@@ -4,7 +4,6 @@ require 'sequel'
 require 'haml'
 
 DB = Sequel.sqlite('url') unless defined?(DB)
-
 dataset = DB[:urls]
 
 get '/p/:url' do
@@ -28,15 +27,22 @@ get '/' do
   haml :form
 end
 
+# A get based creator so that bookmarklet can be used
+get '/c/*' do
+  create_and_display(params[:splat])
+end
+
 post '/create' do
-  # Don't create duplicate!
-  if dataset.filter(:url => params[:url]).empty?
-    dataset << {:url => params[:url] }
+  create_and_display(params[:url])
+end
+
+def create_and_display(url)
+  if dataset.filter(:url => url).empty?
+    dataset << {:url => url }
   end
   
-  url = dataset.filter(:url => params[:url])
+  url = dataset.filter(:url => url)
   # Dunno why we have to call [:id] twice...
-  @id = url[:id][:id].to_s(36)
+  url[:id][:id].to_s(36)
   haml :url
 end
- 
