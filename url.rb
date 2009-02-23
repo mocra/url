@@ -13,6 +13,10 @@ begin
                       :user => database["user"] || database["username"],
                       :password => database["password"],
                       :host => database["host"] || 'localhost') unless defined?(DB)
+  elsif database["adapter"] == "postgresql" || database["adapter"] == "postgres"
+    DB = Sequel.connect('postgres://#{database[:user] || database[:username]}:#{database[:password]}@#{database[:host] || "localhost"}/#{database[:database]}') unless defined?(DB)
+  end
+  
     unless DB.table_exists?(:urls)
       DB.create_table :urls do
         primary_key :id
