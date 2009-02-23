@@ -8,7 +8,11 @@ DB = Sequel.sqlite('url') unless defined?(DB)
 dataset = DB[:urls]
 
 get '/:url' do
-  redirect dataset.filter(:id => params[:url].to_i(36)).first[:url]
+  begin
+    redirect dataset.filter(:id => params[:url].to_i(36)).first[:url]
+  rescue
+    haml :error
+  end
 end
 
 get '/' do
