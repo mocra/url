@@ -1,7 +1,7 @@
 # Don't cause the server to break if Passenger module not loaded
 <IfModule passenger_module>
 	<VirtualHost *:80>
-	  ServerName url.mocra.com
+	  ServerName u.mocra.com
 	  DocumentRoot "/opt/apps/url/current/public"
 	  RackEnv production
 	  # RailsAllowModRewrite off

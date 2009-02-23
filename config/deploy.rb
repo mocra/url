@@ -1,7 +1,7 @@
 require 'deprec'
 
 set :application, "url"
-set :domain,      "url.mocra.com"
+set :domain,      "u.mocra.com"
 set :repository,  "git://github.com/mocra/#{application}.git"
 
 # If you aren't using Subversion to manage your source code, specify
