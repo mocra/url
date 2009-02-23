@@ -22,7 +22,7 @@ end
 
 post '/create' do
   # Don't create duplicate!
-  if params[:url].include?(request.env['HTTP_HOST'])
+  if url_chain?(params[:url])
     @error = "You've been bad.<br />You cannot create URL chains."
     haml :error
   else
@@ -37,3 +37,7 @@ post '/create' do
   end
 end
  
+def url_chain?(string)
+  blacklist = [request.env['HTTP_HOST'], "tinyurl", "is.gd", "tr.im", "rubyurl"]
+  !!blacklist.detect { |url| params[:url].include?(url) }
+end
