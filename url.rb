@@ -22,8 +22,6 @@ end
 
 post '/create' do
   # Don't create duplicate!
-  puts request.env['HTTP_HOST']
-  puts params[:url].inspect
   if params[:url].include?(request.env['HTTP_HOST'])
     @error = "You've been bad.<br />You cannot create URL chains."
     haml :error
