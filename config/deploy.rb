@@ -2,7 +2,7 @@ require 'deprec'
 
 set :application, "url"
 set :domain,      "url.mocra.com"
-set :repository,  "git@github.com:mocra/#{application}.git"
+set :repository,  "git://github.com/mocra/#{application}.git"
 
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
@@ -12,6 +12,7 @@ set :ruby_vm_type,      :ree        # :ree, :mri
 set :web_server_type,   :apache     # :apache, :nginx
 set :app_server_type,   :passenger  # :passenger, :mongrel
 
+ssh_options[:forward_agent] = true
 # set :packages_for_project, %w(libmagick9-dev imagemagick libfreeimage3) # list of packages to be installed
 # set :gems_for_project, %w(rmagick mini_magick image_science) # list of gems to be installed
 
