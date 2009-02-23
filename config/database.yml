@@ -1,0 +1,4 @@
+adapter: mysql
+username: root
+password: 
+database: url
