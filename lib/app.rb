@@ -1,5 +1,8 @@
 DB = Sequel.sqlite('url') unless defined?(DB)
-dataset = DB[:urls]
+
+def dataset; DB[:urls]; end
+
+AppError = Class.new(Exception)
 
 get '/p/:url' do
   begin
@@ -26,14 +29,16 @@ end
 
 # A get based creator so that bookmarklet can be used
 get '/c/*' do
-  create_and_display(params[:splat])
+  create_and_display(params[:splat].to_s)
 end
 
 post '/create' do
   create_and_display(params[:url])
 end
 
-error do
-  @error = request.env["sinatra.error"]
-  haml :error
+[AppError, Sinatra::NotFound].each do |e|
+  error e do
+    @error = request.env["sinatra.error"].name
+    haml :error
+  end
 end
