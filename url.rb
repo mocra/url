@@ -11,6 +11,7 @@ get '/:url' do
   begin
     redirect dataset.filter(:id => params[:url].to_i(36)).first[:url]
   rescue
+    @error = "We could not find that URL."
     haml :error
   end
 end
@@ -21,16 +22,20 @@ end
 
 post '/create' do
   # Don't create duplicate!
+  puts request.env['HTTP_HOST']
+  puts params[:url].inspect
   if params[:url].include?(request.env['HTTP_HOST'])
     @error = "You've been bad.<br />You cannot create URL chains."
     haml :error
-  if dataset.filter(:url => params[:url]).empty?
-    dataset << {:url => params[:url] }
-  end
+  else
+    if dataset.filter(:url => params[:url]).empty?
+      dataset << {:url => params[:url] }
+    end
   
-  url = dataset.filter(:url => params[:url])
-  # Dunno why we have to call [:id] twice...
-  @id = url[:id][:id].to_s(36)
-  haml :url
+    url = dataset.filter(:url => params[:url])
+    # Dunno why we have to call [:id] twice...
+    @id = url[:id][:id].to_s(36)
+    haml :url
+  end
 end
  
