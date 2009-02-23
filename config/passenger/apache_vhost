@@ -1,0 +1,21 @@
+# Don't cause the server to break if Passenger module not loaded
+<IfModule passenger_module>
+	<VirtualHost *:80>
+	  ServerName u.yoursite.com
+	  DocumentRoot "/opt/apps/url/current/public"
+	  RackEnv production
+	  # RailsAllowModRewrite off
+	  #
+	  # Check for maintenance file and redirect all requests
+	  RewriteEngine On
+	  RewriteCond %{REQUEST_URI} !\.(css|jpg|png|gif)$
+	  RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
+	  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+      RewriteRule ^.*$ /system/maintenance.html [L]
+	  <Directory "/opt/apps/url/current/public">
+	    Order allow,deny
+	    Allow from all
+	  </Directory>
+	</VirtualHost>
+</IfModule>
+
