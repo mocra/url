@@ -7,6 +7,15 @@ DB = Sequel.sqlite('url') unless defined?(DB)
 
 dataset = DB[:urls]
 
+get '/p/:url' do
+  begin
+    @url = dataset.filter(:id => params[:url].to_i(36)).first[:url]
+    haml :preview
+  rescue
+    haml :error
+  end
+end
+
 get '/:url' do
   begin
     redirect dataset.filter(:id => params[:url].to_i(36)).first[:url]
