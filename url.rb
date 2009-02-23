@@ -36,8 +36,8 @@ post '/create' do
   if url_chain?(params[:url])
     @error = "You've been bad.<br />You cannot create URL chains."
     haml :error
-  
-  else
+  elsif params[:url].length.zero?
+    @error = 
     
     params[:url] = assume_http(params[:url])
     
