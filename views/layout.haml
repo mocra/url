@@ -1,6 +1,8 @@
 %html
   %head
-    %link{ :rel => "stylesheet", :href => "/style.css"}
+    %link{ :rel => "stylesheet", :href => "/style.css?#{Time.now}"}
+    %script{ :src => "/jquery.js?#{Time.now}", :type => "text/javascript" }
+    %script{ :src => "/application.js?#{Time.now}", :type => "text/javascript" }
   %body
     = yield
     
