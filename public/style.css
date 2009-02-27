@@ -38,6 +38,10 @@ a {
   width: 40em;
   overflow: none;
 }
+
+.url a {
+  display: block;
+}
 h3, h6 { 
   padding: 0px;
   margin: 0px;
