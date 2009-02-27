@@ -1,0 +1,13 @@
+.left{ :align => "left"}
+- for row in $dataset
+  - permalink = row[:id]
+  = permalink
+  \=>
+  = row[:url]
+  %br/
+  %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
+    %h4 As seen on twitter:
+  %hr
+  
+  
+%script{ :src => "http://search.twitter.com/search.json?q=u.mocra.com%2F6&callback=twitterCallback"}

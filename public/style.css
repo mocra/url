@@ -1,12 +1,10 @@
 body {
-	margin-top: 20%;
 	background: #fde181;
 	color: #830000;
-	text-align: center;
 }
 
 body, input {
-  font: 36pt Sans-serif;
+  font: 16pt Sans-serif;
   font-weight:bold;
 }
 
@@ -26,4 +24,12 @@ input#url {
 
 a {
   color: #830000;
+}
+
+.left {
+  text-align: left;
+}
+
+.as-seen-on {
+  display: none;
 }

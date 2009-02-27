@@ -7,7 +7,9 @@
     %input{ :type => "submit", :name => "submit", :value => "URLize", :class => "button" }
     
 %small
-  == We haz #{DB[:urls].count} urls
+  We haz 
+  %a{:href => "/urls"}== #{DB[:urls].count} urls
+  
   %br/
   Drag 
   -#%a{:href => "javascript:void(location.host=='maps.google.com'?location.href='http://#{request.env['HTTP_HOST']}/c/'+encodeURIComponent(document.getElementById('link').href):location.href='http://#{request.env['HTTP_HOST']}/c/'+encodeURIComponent(location.href))"}
