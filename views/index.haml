@@ -5,12 +5,15 @@
   .url
     %h3= row[:url]
     %h6
-      == http://u.mocra.com/#{row[:id]}
-      - permalinks << row[:id]
+      - permalink = row[:id].to_s(36)
+      == http://u.mocra.com/#{permalink}
+      - permalinks << permalink
       %div{ :id => "as-seen-on-#{row[:id]}", :class => 'as-seen-on' }
         %h4 As seen on twitter:
   
 
 - search_url = "http://search.twitter.com/search.json?rpp=100000&callback=twitterCallback&ors=#{permalinks.map { |p| "u.mocra.com/#{p}" }.join("+")}"
 %script{ :src => search_url}
-  
+
+- if params[:page] == 1
+  2
