@@ -39,7 +39,7 @@ a {
   overflow: none;
 }
 
-.url a {
+.url .original-url {
   display: block;
 }
 h3, h6 { 
