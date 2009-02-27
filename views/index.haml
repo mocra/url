@@ -8,12 +8,19 @@
 .left{ :align => "left"}
 - permalinks = []
 - for row in @paginated_rows
-  .url
+  - extra = !/.(jpg|jpeg|gif|png|tiff|svg|bmp)$/.match(row[:url]).nil? ? "url-image-preview" : nil
+  .url{ :class => extra }
     %a{ :href => row[:url], :class => "original-url" }= row[:url]
     %h6
       - permalink = row[:id].to_s(36)
       == http://u.mocra.com/#{permalink}
       - permalinks << permalink
+      %br/
+      - if extra
+        %div.image-preview
+          %b Preview:
+          %br/
+          %img{ :src => row[:url], :height => "100px" }
       %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
         %h4 As seen on twitter:
   

@@ -39,8 +39,23 @@ a {
   overflow: none;
 }
 
+.url-image-preview {
+  height: 200px;
+}
+
 .url .original-url {
   display: block;
+}
+
+.image-preview {
+  border: 2px solid #ffda5b;
+  padding: 10px;
+  width: 100px;
+  float: right;
+}
+.image-preview img {
+  border:1px solid #c9ad71;
+
 }
 h3, h6 { 
   padding: 0px;
