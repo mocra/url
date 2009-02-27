@@ -13,13 +13,13 @@ begin
 											:user => database["user"] || database["username"],
 											:password => database["password"],
 											:host => database["host"] || 'localhost') unless defined?(DB)
-		unless DB.table_exists?(:urls)
-			DB.create_table :urls do
-				primary_key :id
-				column :url, :text
-			end
+	end
+	
+	unless DB.table_exists?(:urls)
+		DB.create_table :urls do
+			primary_key :id
+			column :url, :text
 		end
-		
 	end
 	$dataset = DB[:urls]
 end
@@ -30,7 +30,7 @@ end
 
 # We paginate 10 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
 def paginate
-  @paginated_rows = $dataset.paginate(3, 2)
+  @paginated_rows = $dataset.paginate(params[:page], 10)
 end
 
 get '/urls' do
