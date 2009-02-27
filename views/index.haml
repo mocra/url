@@ -1,4 +1,10 @@
 %h1 URL mentions on twitter:
+- if previous_page
+  %a{ :href => "/urls/#{params[:page].to_i - 1}"} &laquo; Previous Page
+
+
+- if next_page
+  %a{ :href => "/urls/#{params[:page].to_i + 1}"} Next Page &raquo;
 .left{ :align => "left"}
 - permalinks = []
 - for row in @paginated_rows
@@ -8,12 +14,15 @@
       - permalink = row[:id].to_s(36)
       == http://u.mocra.com/#{permalink}
       - permalinks << permalink
-      %div{ :id => "as-seen-on-#{row[:id]}", :class => 'as-seen-on' }
+      %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
         %h4 As seen on twitter:
   
+- if previous_page
+  %a{ :href => "/urls/#{params[:page].to_i - 1}"} &laquo; Previous Page
+
+
+- if next_page
+  %a{ :href => "/urls/#{params[:page].to_i + 1}"} Next Page &raquo;
 
 - search_url = "http://search.twitter.com/search.json?rpp=100000&callback=twitterCallback&ors=#{permalinks.map { |p| "u.mocra.com/#{p}" }.join("+")}"
 %script{ :src => search_url}
-
-- if params[:page] == 1
-  2

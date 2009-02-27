@@ -36,6 +36,7 @@ a {
   padding: 5px;
   background: #e1c35e;
   width: 40em;
+  overflow: none;
 }
 h3, h6 { 
   padding: 0px;
