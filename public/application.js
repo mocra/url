@@ -15,3 +15,14 @@ function twitterCallback(data) {
     }
   }
 }
+
+(function($){ 
+  $(document).ready(function() {
+    $('a.original-url').each(function(index) {
+      var href = $(this).attr("href");
+      if (href.length > 80) {
+        $(this).html(href.substr(0, 60) + "...");
+      }
+    });
+  });
+})(jQuery); 

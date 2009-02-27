@@ -9,7 +9,7 @@
 - permalinks = []
 - for row in @paginated_rows
   .url
-    %a{ :href => row[:url] }= row[:url]
+    %a{ :href => row[:url], :class => "original-url" }= row[:url]
     %h6
       - permalink = row[:id].to_s(36)
       == http://u.mocra.com/#{permalink}
