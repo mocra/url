@@ -28,7 +28,19 @@ class AppError < Exception
 	
 end
 
+# We paginate 10 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
+def paginate
+  @paginated_rows = $dataset.paginate(3, 2)
+end
+
 get '/urls' do
+  params[:page] = 1
+  paginate
+  haml :index
+end
+
+get '/urls/:page' do
+  paginate
   haml :index
 end
 

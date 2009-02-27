@@ -1,17 +1,16 @@
+%h1 URL mentions on twitter:
 .left{ :align => "left"}
-- for row in $dataset
-  - permalink = row[:id]
-  = permalink
-  \=>
-  = row[:url]
-  %br/
-  %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
-    %h4 As seen on twitter:
-  %hr
+- permalinks = []
+- for row in @paginated_rows
+  .url
+    %h3= row[:url]
+    %h6
+      == http://u.mocra.com/#{row[:id]}
+      - permalinks << row[:id]
+      %div{ :id => "as-seen-on-#{row[:id]}", :class => 'as-seen-on' }
+        %h4 As seen on twitter:
   
 
-- for row in $dataset
-  - permalink = row[:id]
-  %script{ :src => "http://search.twitter.com/search.json?callback=twitterCallback&q=u.mocra.com%2F#{permalink}"}
-  
+- search_url = "http://search.twitter.com/search.json?rpp=100000&callback=twitterCallback&ors=#{permalinks.map { |p| "u.mocra.com/#{p}" }.join("+")}"
+%script{ :src => search_url}
   

@@ -1,4 +1,2 @@
-adapter: mysql
-username: root
-password: 7b10fbb
+adapter: sqlite3
 database: url

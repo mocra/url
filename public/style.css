@@ -30,6 +30,18 @@ a {
   text-align: left;
 }
 
+.url {
+  border: 3px solid #c9ad71;
+  margin: 5px;
+  padding: 5px;
+  background: #e1c35e;
+  width: 40em;
+}
+h3, h6 { 
+  padding: 0px;
+  margin: 0px;
+}
+
 .as-seen-on {
   display: none;
 }
