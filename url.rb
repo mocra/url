@@ -102,9 +102,11 @@ def create_and_display(url)
 	url
 	url = assume_http(url)
 	if url_chain?(url)
-		raise "You've been bad.<br />You cannot create URL chains."
+		@error = "You've been bad.<br />You cannot create URL chains."
+		haml :error
 	elsif url.length.zero?
-		raise "Input a URL, please."
+		@error = "Input a URL, please."
+		haml :error
 	else
 		if $dataset.filter(:url => url).empty?
 			$dataset << {:url => url }
