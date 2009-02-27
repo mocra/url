@@ -12,7 +12,7 @@
     %a{ :href => row[:url], :class => "original-url" }= row[:url]
     %h6
       - permalink = row[:id].to_s(36)
-      == http://u.mocra.com/#{permalink}
+      == http://#{request.env['HTTP_HOST']}/#{permalink}
       - permalinks << permalink
       %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
         %h4 As seen on twitter:
@@ -24,5 +24,5 @@
 - if next_page
   %a{ :href => "/urls/#{params[:page].to_i + 1}"} Next Page &raquo;
 
-- search_url = "http://search.twitter.com/search.json?rpp=100000&callback=twitterCallback&ors=#{permalinks.map { |p| "u.mocra.com/#{p}" }.join("+")}"
+- search_url = "http://search.twitter.com/search.json?rpp=100000&callback=twitterCallback&ors=#{permalinks.map { |p| "#{request.env['HTTP_HOST']}/#{p}" }.join("+")}"
 %script{ :src => search_url}
