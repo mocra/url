@@ -107,6 +107,9 @@ def create_and_display(url)
 	elsif url.length.zero?
 		@error = "Input a URL, please."
 		haml :error
+	elsif !validate(url)
+    @error = "That's not how you make URL!"
+  	haml :error
 	else
 		if $dataset.filter(:url => url).empty?
 			$dataset << {:url => url }
@@ -129,4 +132,8 @@ def assume_http(url)
 		url = "http://#{url}"
 	end
 	url
+end
+
+def validate(url)
+  !/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/.match(url).nil?
 end
