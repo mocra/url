@@ -28,9 +28,9 @@ class AppError < Exception
 	
 end
 
-# We paginate 10 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
+# We paginate 7 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
 def paginate
-  @paginated_rows = $dataset.reverse_order(id).paginate(params[:page], 7)
+  @paginated_rows = $dataset.reverse_order(:id).paginate(params[:page], 7)
 end
 
 get '/urls' do
