@@ -30,7 +30,7 @@ end
 
 # We paginate 10 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
 def paginate
-  @paginated_rows = $dataset.paginate(params[:page], 10)
+  @paginated_rows = $dataset.reverse_order(id).paginate(params[:page], 7)
 end
 
 get '/urls' do
