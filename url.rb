@@ -38,11 +38,12 @@ def next_page
 end
 
 def previous_page
+  return false if params[:page] == "1"
   !$dataset.reverse_order(:id).paginate(params[:page].to_i - 1, 7).empty?
 end
 
 get '/urls' do
-  params[:page] = 1
+  params[:page] = "1"
   paginate
   haml :index
 end
