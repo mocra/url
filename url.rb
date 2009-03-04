@@ -73,7 +73,7 @@ get '/:url' do
 end
 
 get '/' do
-  header 'Content-Type' => 'text/html; charset=utf-8'
+  content_type 'text/html', :charset => 'utf-8'
 	haml :form
 end
 

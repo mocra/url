@@ -8,7 +8,7 @@ function twitterCallback(data) {
     findUrl = result.text.match(/u.mocra.com\/[p\/]?[^\s]+\b/g);
     if (findUrl) {
       for (var j=0; j < findUrl.length; j++) {
-        var id = findUrl[j].match(/u.mocra.com\/[p\/]?([^\s]+)\b/)[1];
+        var id = findUrl[j].match(/u.mocra.com\/[p\/]?([^\s]+)\b/g)[1];
         $('#as-seen-on-' + id).show();
         setAsSeenOn(id, result.text, result.from_user, result.id);
       }
