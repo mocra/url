@@ -3,9 +3,10 @@ require 'sinatra'
 require 'yaml'
 require 'sequel'
 
-
+__DIR__ = File.dirname(__FILE__)
 begin
-	database = YAML::load(File.open("config/database.yml"))
+
+	database = YAML::load(File.open(__DIR__+"/config/database.yml"))
 	if database["adapter"] == "sqlite" || database["adapter"] == "sqlite3"
 		DB = Sequel.sqlite('url') unless defined?(DB)
 	elsif database["adapter"] == "mysql"
@@ -55,7 +56,7 @@ end
 
 get '/p/:url' do
 	begin
-		@url = $dataset.filter(:id => params[:url].to_i(36)).first[:url]
+		@url = $dataset.filter(:id => url2int(params[:url])).first[:url]
 		@url = assume_http(@url)
 		haml :preview
 	rescue Exception => e
@@ -65,7 +66,7 @@ end
 
 get '/:url' do
 	begin
-		url = $dataset.filter(:id => params[:url].to_i(36)).first[:url]
+		url = $dataset.filter(:id => url2int(params[:url])).first[:url]
 		redirect assume_http(url)
 	rescue
 		missing_url
@@ -94,6 +95,7 @@ end
 
 
 
+
 def missing_url
 	raise Sinatra::NotFound, "We could not find that URL."
 end
@@ -113,7 +115,7 @@ def create_and_display(url)
 		end
 	
 		url = $dataset.filter(:url => url)
-		@id = url[:id][:id].to_s(36)
+		@id = int2url(url[:id][:id])
 		haml :url
 	end
 end
@@ -130,3 +132,34 @@ def assume_http(url)
 	end
 	url
 end
+
+
+DIGITS = [ ('0'..'9').to_a, ('A'..'Z').to_a, ('a'..'z').to_a ].flatten
+RADIX = DIGITS.length
+
+def int2url(i)
+  if i == 0
+    return '0'
+  end
+
+  url = []
+
+  while i != 0
+    url.unshift DIGITS[i % RADIX]
+    i /= RADIX
+  end
+
+  url * ''
+end
+
+def url2int(u)
+  digits = u.split('').reverse
+  int = 0
+
+  digits.each_with_index do |d,offset|
+    int += DIGITS.index(d) * (RADIX ** offset)
+  end
+
+  int
+end
+
