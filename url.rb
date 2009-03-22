@@ -79,7 +79,14 @@ end
 
 # A get based creator so that bookmarklet can be used
 get '/c/*' do
-	create_and_display(params[:splat].to_s)
+  url = params[:splat].to_s
+  # Extrapolate extra parameters as belonging to the url passed in, not to /c!
+  if params.size > 1
+    params.delete('splat')
+    url += '?' + params.map { |p| "#{p.first}=#{p.last}" }.join("&") 
+  end
+  
+	create_and_display(url)
 end
 
 post '/create' do
