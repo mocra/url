@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'haml'
 require 'yaml'
 require 'sequel'
 require 'sequel/extensions/pagination'
