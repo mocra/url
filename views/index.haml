@@ -13,6 +13,7 @@
     %h6
       - permalink = row[:id].to_s(36)
       == http://#{request.env['HTTP_HOST']}/#{permalink}
+      == Clicks: #{row[:clicks]}
       - permalinks << permalink
       %div{ :id => "as-seen-on-#{permalink}", :class => 'as-seen-on' }
         %h4 As seen on twitter:

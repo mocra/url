@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'yaml'
 require 'sequel'
+require 'sequel/extensions/pagination'
 
 __DIR__ = File.dirname(__FILE__)
 begin
@@ -20,6 +21,7 @@ begin
 		DB.create_table :urls do
 			primary_key :id
 			column :url, :text
+			column :clicks, :integer, :default => 0
 		end
 	end
 	$dataset = DB[:urls]
@@ -57,20 +59,19 @@ end
 get '/p/:url' do
 	begin
 		@url = $dataset.filter(:id => url2int(params[:url])).first[:url]
-		@url = assume_http(@url)
-		haml :preview
 	rescue Exception => e
-		missing_url
-	end
+	  missing_url
+  end
+	
+	@url = assume_http(@url)
+	haml :preview
 end
 
 get '/:url' do
-	begin
-		url = $dataset.filter(:id => url2int(params[:url])).first[:url]
-		redirect assume_http(url)
-	rescue
-		missing_url
-	end
+		set = $dataset.filter(:id => url2int(params[:url])).limit(1)
+		record = set.first
+		set.update(:clicks => record[:clicks].to_i + 1)
+		redirect assume_http(record[:url])
 end
 
 get '/' do
@@ -86,8 +87,6 @@ get '/c/*' do
     params.delete('splat')
     url += '?' + params.map { |p| "#{p.first}=#{p.last}" }.join("&") 
   end
-    
-  puts url.inspect
 	create_and_display(url)
 end
 
@@ -106,7 +105,8 @@ end
 
 
 def missing_url
-	raise Sinatra::NotFound, "We could not find that URL."
+  @error = "ooh ahh"
+  haml :error
 end
 
 def create_and_display(url)
