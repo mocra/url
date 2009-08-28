@@ -14,7 +14,7 @@
     %h6
       - permalink = row[:id].to_s(36)
       == http://#{request.env['HTTP_HOST']}/#{permalink}
-      == Clicks: #{row[:clicks]}
+      == Clicks: #{row[:clicks].to_i}
       - permalinks << permalink
       %br/
       - if extra
