@@ -3,10 +3,12 @@ require 'sinatra'
 require 'yaml'
 require 'haml'
 require 'sequel'
+require 'sequel/extensions/pagination'
 
-
+__DIR__ = File.dirname(__FILE__)
 begin
-	database = YAML::load(File.open("config/database.yml"))
+
+	database = YAML::load(File.open(__DIR__+"/config/database.yml"))
 	if database["adapter"] == "sqlite" || database["adapter"] == "sqlite3"
 		DB = Sequel.sqlite('url') unless defined?(DB)
 	elsif database["adapter"] == "mysql"
@@ -20,6 +22,7 @@ begin
 		DB.create_table :urls do
 			primary_key :id
 			column :url, :text
+			column :clicks, :integer, :default => 0
 		end
 	end
 	$dataset = DB[:urls]
@@ -56,21 +59,20 @@ end
 
 get '/p/:url' do
 	begin
-		@url = $dataset.filter(:id => params[:url].to_i(36)).first[:url]
-		@url = assume_http(@url)
-		haml :preview
+		@url = $dataset.filter(:id => url2int(params[:url])).first[:url]
 	rescue Exception => e
-		missing_url
-	end
+	  missing_url
+  end
+	
+	@url = assume_http(@url)
+	haml :preview
 end
 
 get '/:url' do
-	begin
-		url = $dataset.filter(:id => params[:url].to_i(36)).first[:url]
-		redirect assume_http(url)
-	rescue
-		missing_url
-	end
+		set = $dataset.filter(:id => url2int(params[:url])).limit(1)
+		record = set.first
+		set.update(:clicks => record[:clicks].to_i + 1)
+		redirect assume_http(record[:url])
 end
 
 get '/' do
@@ -86,7 +88,6 @@ get '/c/*' do
     params.delete('splat')
     url += '?' + params.map { |p| "#{p.first}=#{p.last}" }.join("&") 
   end
-  
 	create_and_display(url)
 end
 
@@ -95,16 +96,18 @@ post '/create' do
 end
 
 [AppError, Sinatra::NotFound].each do |e|
-	error e do
-		@error = request.env["sinatra.error"].name
-		haml :error
-	end
+  error e do
+    @error = request.env["sinatra.error"].name
+    haml :error
+  end
 end
 
 
 
+
 def missing_url
-	raise Sinatra::NotFound, "We could not find that URL."
+  @error = "ooh ahh"
+  haml :error
 end
 
 def create_and_display(url)
@@ -125,7 +128,7 @@ def create_and_display(url)
 		end
 	
 		url = $dataset.filter(:url => url)
-		@id = url[:id][:id].to_s(36)
+		@id = int2url(url[:id][:id])
 		haml :url
 	end
 end
@@ -146,3 +149,33 @@ end
 def validate(url)
   !/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/.match(url).nil?
 end
+
+DIGITS = [ ('0'..'9').to_a, ('A'..'Z').to_a, ('a'..'z').to_a ].flatten
+RADIX = DIGITS.length
+
+def int2url(i)
+  if i == 0
+    return '0'
+  end
+
+  url = []
+
+  while i != 0
+    url.unshift DIGITS[i % RADIX]
+    i /= RADIX
+  end
+
+  url * ''
+end
+
+def url2int(u)
+  digits = u.split('').reverse
+  int = 0
+
+  digits.each_with_index do |d,offset|
+    int += DIGITS.index(d) * (RADIX ** offset)
+  end
+
+  int
+end
+
