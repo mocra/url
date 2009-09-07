@@ -33,18 +33,18 @@ class AppError < Exception
 	
 end
 
-# We paginate 7 because the twitter search url can only be so long, we'll be conservative and try to keep this under 255.
+# We paginate 7 because the twitter search url can only be so long, we'll be conservative and try to keep this under 140.
 def paginate
-  @paginated_rows = $dataset.reverse_order(:id).paginate(params[:page].to_i, 7)
+  @paginated_rows = $dataset.reverse_order(:id).paginate(params[:page].to_i, 5)
 end
 
 def next_page
-  !$dataset.reverse_order(:id).paginate(params[:page].to_i + 1, 7).empty?
+  !$dataset.reverse_order(:id).paginate(params[:page].to_i + 1, 5).empty?
 end
 
 def previous_page
   return false if params[:page] == "1"
-  !$dataset.reverse_order(:id).paginate(params[:page].to_i - 1, 7).empty?
+  !$dataset.reverse_order(:id).paginate(params[:page].to_i - 1, 5).empty?
 end
 
 get '/urls' do
